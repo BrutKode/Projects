@@ -8,6 +8,7 @@ typedef struct node
 } node;
 
 node* addItem(int value, node *parent);
+node* removeItem(node *parent);
 
 int main(void)
 {
@@ -21,7 +22,7 @@ int main(void)
 	
 	for(int i=0; i<10; ++i)
 	{
-		addItem(i, Parent);
+		printf("The top of the stack is: %p\n", addItem(i, Parent));
 	}	
 	
 	Child = Parent->next;
@@ -34,10 +35,7 @@ int main(void)
 	Child = Parent->next;
 	for(int i=0; i<10; ++i)
 	{
-		node *Grandchild = Child->next;
-		printf("Killed child at %p\n", Child);
-		free(Child);
-		Child = Grandchild;
+		printf("The top of the stack is: %p\n", removeItem(Parent));
 	}
 	
 	free(Child);
@@ -61,4 +59,31 @@ node* addItem(int value, node *parent)
 	grandchild->value = value;
 	grandchild->next = NULL;
 	return grandchild;
+}
+
+node* removeItem(node *parent)
+{
+	node *child = parent->next;
+	node *grandchild = child->next;
+	if(child == NULL)
+	{
+		return NULL;
+	}
+	else if(child->next == NULL)
+	{
+		free(child);
+		parent->next = NULL;
+		return parent;
+	}
+	else
+	{
+		while(grandchild->next != NULL)
+		{
+			child = child->next;
+			grandchild = grandchild->next;
+		}
+		free(grandchild);
+		child->next = NULL;
+		return child;
+	}
 }
