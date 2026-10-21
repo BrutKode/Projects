@@ -7,6 +7,8 @@ typedef struct node
 	struct node *next;
 } node;
 
+node* addItem(int value, node *parent);
+
 int main(void)
 {
 	node *Parent = malloc(sizeof(node));
@@ -19,11 +21,7 @@ int main(void)
 	
 	for(int i=0; i<10; ++i)
 	{
-		node *Grandchild = malloc(sizeof(node));
-		Child->next = Grandchild;
-		Grandchild->value = i;
-		Grandchild->next = NULL;
-		Child = Child->next;
+		addItem(i, Parent);
 	}	
 	
 	Child = Parent->next;
@@ -45,4 +43,22 @@ int main(void)
 	free(Child);
 	free(Parent);
 	return 0;
+}
+
+node* addItem(int value, node *parent)
+{
+	node *child = parent;
+	if(parent->next != NULL)
+	{
+		child = parent->next;
+		while(child->next != NULL)
+		{
+			child = child->next;
+		}
+	}
+	node *grandchild = malloc(sizeof(node));
+	child->next = grandchild;
+	grandchild->value = value;
+	grandchild->next = NULL;
+	return grandchild;
 }
